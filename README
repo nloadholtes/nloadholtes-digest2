@@ -55,9 +55,8 @@ is still a 1% chance of this turning out to be a Mars crosser with q >= 1.3.
 
 Create a new directory for the program and download directly into the
 new directory, if that is convenient.  The source and associated files
-are available at http://sourceforge.net/projects/statrange/.
-Click the big green "Download Now!" button to download the newest package.
-It contains all needed files.
+are available at http://code.google.com/p/digest2/.  Click the Downloads
+tab and download the latest archive.
 
 
 3.  Unpacking, building, installing
