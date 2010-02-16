@@ -107,13 +107,13 @@ Side effect on passed observation line:
    if function returns success, line will be zero-terminated
    after the 12-character designation field.
 
-Side effect on passed tracklet struct:
-   fields olist, nObs, obsCap, and desig can be updated.
-   allocation of olist can be modified.
-   on successful parse, an observation struct in olist is updated
+Side effect on passed observation struct:
+   on successful parse, observation struct is updated
    with parsed values.
 */
 _Bool parseMpc80(char *line, observation *obsp) {
+   if (line[14] != 'C' && line[14] != 'S')
+      return 0;
    // parse right to left so we can punch line with zeros as needed
    int site = parseCod3(line+77);
    if (site < 0)
@@ -169,5 +169,32 @@ _Bool parseMpc80(char *line, observation *obsp) {
       }
    obsp->vmag = mag;
    obsp->site = site;
+   return 1;
+}
+
+_Bool parseMpcSat(char *line, observation *obsp) {
+   // Scale factor = 1 / 1 AU in km.
+   const double sf = 1 / 149.59787e6;
+
+   if (parseCod3(line+77) != obsp->site)
+      return 0;
+   errno = 0;
+   line[69] = 0;
+   double z = mustStrtod(line+58);
+   line[57] = 0;
+   double y = mustStrtod(line+46);
+   line[45] = 0;
+   double x = mustStrtod(line+34);
+   if (errno)
+      return 0;
+   if (line[32] == '1') {
+      x *= sf;
+      y *= sf;
+      z *= sf;
+   }
+   obsp->earth_observer[0] = x;
+   obsp->earth_observer[1] = y;
+   obsp->earth_observer[2] = z;
+   obsp->spacebased = 1;
    return 1;
 }

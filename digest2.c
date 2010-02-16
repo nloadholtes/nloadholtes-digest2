@@ -114,13 +114,17 @@ void fatal1(char *msg, char *arg) {
 /* mustStrtod
 
 for required fields.  a version of atof that sets errno on blank input.
+also allows whitespace after sign
 */
 double mustStrtod(char *str) {
    char *endp;
+   _Bool neg = *str == '-';
+   if (neg || *str == '+')
+      str++;
    double result = strtod(str, &endp);
    if (!errno && endp == str)
       errno = EINVAL;
-   return result;
+   return neg ? -result : result;
 }
 
 /* mustStrtoi
@@ -521,8 +525,18 @@ int main (int argc, char **argv) {
       : resetInvalid();
       
    // main loop
-   while (fgets(line, LINE_SIZE, fobs))
-      if (parseMpc80(line, &obs1))
+   while (fgets(line, LINE_SIZE, fobs)) {
+      _Bool pGood;
+
+      if (line[14] == 's') {
+         if (tk->lines && parseMpcSat(line, tk->olist + tk->lines - 1))
+            continue;
+         pGood = 0;
+      }
+      else
+         pGood = parseMpc80(line, &obs1);
+
+      if (pGood)
          if (tk->status == INVALID || strcmp(line, tk->desig)) {
             eval(tk);
             tk = resetValid(line, &obs1);
@@ -534,6 +548,7 @@ int main (int argc, char **argv) {
          eval(tk);
          tk = resetInvalid();
       }
+   }
 
    eval(tk);
    fclose(fobs);

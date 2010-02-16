@@ -27,6 +27,8 @@ typedef struct {
                  // 0 means no magnitude.
    int    site;  // index into site table.  basically an integer form of the
                  // MPC three character obscode.
+   _Bool  spacebased;
+   double earth_observer[3];
 } observation;
 
 // site.  observatory site parallax constants.
@@ -128,6 +130,7 @@ int mustStrtoi(char *str);
 // functions in mpc.c
 void readMpcOcd(void);
 _Bool parseMpc80(char *line, observation *obsp);
+_Bool parseMpcSat(char *line, observation *obsp);
 
 // functions in d2mathq.c
 void initGlobals(void);
