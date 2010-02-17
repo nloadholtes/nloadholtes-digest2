@@ -17,6 +17,7 @@ statistics.  "q" bin model is q, e, i, h, non-uniform bin spacing.
 */
 
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -510,13 +511,17 @@ void score(tracklet *tk) {
       site *sitep = siteTable + obsp->site;
       double sun_earth[3], soe, coe;
       se2000(obsp->mjd, sun_earth, &soe, &coe);
-      double th = lst(obsp->mjd, sitep->longitude);
 
       // sun-observer vectors in ecliptic coordinates
       double v[3];
-      v[0] = sitep->rhoCosPhi * cos(th);
-      v[1] = sitep->rhoCosPhi * sin(th);
-      v[2] = sitep->rhoSinPhi;
+      if (obsp->spacebased)
+         memcpy(v, obsp->earth_observer, sizeof(v));
+      else {
+         double th = lst(obsp->mjd, sitep->longitude);
+         v[0] = sitep->rhoCosPhi * cos(th);
+         v[1] = sitep->rhoCosPhi * sin(th);
+         v[2] = sitep->rhoSinPhi;
+      }
       sub3(v, sun_earth);
       ecRotate(v, soe, coe);
       memcpy(tk->sun_observer[i], v, sizeof(v));
