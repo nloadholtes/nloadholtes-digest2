@@ -27,7 +27,7 @@ several new features:
 *  Utilization of multiple processor cores.
 
 The program is still provided as source under an MIT-style open source
-license, and available at http://sourceforge.net/projects/statrange/.
+license, and available at http://code.google.com/p/digest2/.
 
 Sample run:  Say you have some unidentified observations.  For example,
 here are the discovery observations of the NEO 2005 OJ3.  (See MPEC
