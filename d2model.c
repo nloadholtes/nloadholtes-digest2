@@ -175,10 +175,11 @@ _Bool isJFC(double q, double e, double i) {
    return t < 3 && t > 2;
 }
 
-
+// 12 characters looks nice, 13 is ok.
+// anything over 13 is truncated at run time.
 char *classHeading[D2CLASSES] = {
    "MPC interest.",
-   "NEO (q < 1.3)",
+   "NEO(q < 1.3)",
    "Mars Crosser",
    "Hungaria gr.",
    "Phocaea group",

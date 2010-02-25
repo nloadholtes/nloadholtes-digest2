@@ -265,8 +265,17 @@ void eval(tracklet *tk) {
    if (tk->status != UNPROC)
       fatal(msgStatus);
 
+   // working with 12 character designation field was expedient so far.
+   // now compact it to save output columns:  if 5 character field is
+   // non-blank, shift it into 7 character field.
+   if (strncmp(tk->desig, "     ", 5)) {
+       tk->desig[5] = ' ';
+       tk->desig[6] = ' ';
+       strncpy(tk->desig+7, tk->desig, 5);
+   }
+
    if (tk->lines == 1) {
-      printf("%s  single observation.  skipped.\n", tk->desig);
+      printf("%s  single observation.  skipped.\n", tk->desig+5);
       ringAdd(tk);
       return;
    }
@@ -277,7 +286,7 @@ void eval(tracklet *tk) {
 
    // sanity check on time
    if (obsLast->mjd < obsFirst->mjd) {
-      printf("%s  observations out of order.\n", tk->desig);
+      printf("%s  observations out of order.\n", tk->desig+5);
       ringAdd(tk);
       return;
    }
@@ -330,13 +339,14 @@ void *scoreStaged(void *id) {
       score(tk);
 
       // build line for atomic write and print results.
-      int len = snprintf(outputLine, outputLineSize, "%s", tk->desig);
+      int len = snprintf(outputLine, outputLineSize, "%s %5.2f",
+         tk->desig+5, tk->rms);
       perClass *cl;
       int c;
       if (classPossible) {
          cl = tk->class + 1;
          len += snprintf(outputLine + len, outputLineSize - len,
-               "  %6.2f  %6.2f ", cl->rawScore, cl->noIdScore);
+               " %6.2f %6.2f ", cl->rawScore, cl->noIdScore);
          for (c = 2; c < D2CLASSES; c ++) {
             cl = tk->class + c;
             if (cl->rawScore > 0)
@@ -346,7 +356,7 @@ void *scoreStaged(void *id) {
       } else {
          for (c = 0, cl = tk->class; c < nClassConfig; c++, cl++)
             len += snprintf(outputLine + len, outputLineSize - len,
-               "  %6.2f  %6.2f", cl->rawScore, cl->noIdScore);
+               " %6.2f %6.2f", cl->rawScore, cl->noIdScore);
       }
       puts(outputLine);
 
@@ -499,17 +509,17 @@ int main (int argc, char **argv) {
    // column headings, delayed until now to avoid printing column headings
    // only to terminate with an error message if some initialization fails
    if (classPossible) {
-      printf("-----------  %15.15s\n", classHeading[1]);
-      outputLineSize = printf("Designation     Raw   No-ID   ");
+      printf("-------  ---- %13.13s  -------------------\n", classHeading[1]);
+      outputLineSize = printf("Desig.    RMS    Raw  No-ID  ");
       printf("Other Possibilities\n");
       outputLineSize += (D2CLASSES - 2) * 9;
    } else {
-      printf("----------- ");
+      printf("-------  ----");
       for (int c = 0; c < nClassConfig; c++)
-         outputLineSize += printf(" %15.15s", classHeading[classConfig[c]]);
-      outputLineSize += printf("\nDesignation ");
+         outputLineSize += printf(" %13.13s", classHeading[classConfig[c]]);
+      outputLineSize += printf("\nDesig.    RMS");
       for (int c = 0; c < nClassConfig; c++)
-         printf("     Raw   No-ID");
+         printf("    Raw  No-ID");
       puts("");
    }
 

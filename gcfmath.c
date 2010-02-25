@@ -174,7 +174,7 @@ void gcFit(gcfparam *gcf, double mjd[gcf->nObs], double sphr[gcf->nObs][2]) {
 
    // invariant:  first and last points should be on the z=0 plane
    // of the rotated coordinate system now.
-   if (abs(rotated[0][2]) > rtol || abs(rotated[nObs-1][2]) > rtol) {
+   if (fabs(rotated[0][2]) > rtol || fabs(rotated[nObs-1][2]) > rtol) {
       puts("*** rotation failed ***");
       exit(-1);
    }

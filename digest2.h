@@ -85,6 +85,7 @@ typedef struct {
    double invdtsq;                    // 1/(dt**2)
    int    binsTagged;
    _Bool  tag[QX][EX][IX][HX];
+   double rms;
 
    // distance dependent working variables.  these are computed separately
    // for each distance considered.
@@ -107,6 +108,22 @@ typedef struct {
 
    perClass *class;  // array, extent = nClassesComputed
 } tracklet;
+
+typedef struct {
+   // various intermediate values, useful for generating statistics after
+   // the fit is done
+   int    nObs;
+   double mRot[3][3]; // rotation matrix
+   double ra0;        // ra offset
+   double (*rs)[2];   // rotated ra and dec
+   double t0;         // time offset
+   double *ntime;     // normalized times
+   // fit solution parameters
+   double r0;
+   double rr;
+   double d0;
+   double dr;
+} gcfparam;
 
 extern char msgMemory[];
 extern char msgOpen[];
