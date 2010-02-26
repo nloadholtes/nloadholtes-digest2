@@ -1,5 +1,12 @@
 //! C99
 
+/* gcr.c
+
+Copyright (c) 2010 Sonia Keys
+
+See external file LICENSE, distributed with this software.
+*/
+
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>

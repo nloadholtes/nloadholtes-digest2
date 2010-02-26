@@ -34,3 +34,10 @@ astorb.dat:
 obscode.dat:
 	wget "http://www.cfa.harvard.edu/iau/lists/ObsCodes.html"
 	sed '1d;$$d' ObsCodes.html >obscode.dat
+
+# gcr -- stand alone program to show resisuals of great circle fit
+gcrsrc = gcr.c gcfmath.c
+
+gcr: $(gcrsrc) gcf.h
+	gcc -o gcr -std=c99 -Wall -lm $(gcrsrc)
+

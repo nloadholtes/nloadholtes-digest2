@@ -1,6 +1,10 @@
 //! C99
 
 /* gcf.h
+
+Copyright (c) 2010 Sonia Keys
+
+See external file LICENSE, distributed with this software.
 */
 
 #ifndef M_PI
