@@ -7,7 +7,7 @@
 # See external file LICENSE, distributed with this software.
 
 .PHONY: all
-all: digest2 digest2.muk obscode.dat
+all: digest2 digest2.muk obscode.dat gcr
 
 # digest2 executable
 d2src = digest2.c d2model.c d2math.c d2mpc.c
@@ -35,7 +35,7 @@ obscode.dat:
 	wget "http://www.cfa.harvard.edu/iau/lists/ObsCodes.html"
 	sed '1d;$$d' ObsCodes.html >obscode.dat
 
-# gcr -- stand alone program to show resisuals of great circle fit
+# gcr -- stand alone program to show residuals of great circle fit
 gcrsrc = gcr.c gcfmath.c
 
 gcr: $(gcrsrc) gcf.h

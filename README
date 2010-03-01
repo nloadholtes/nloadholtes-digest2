@@ -1,5 +1,5 @@
 
-Digest2 Documentation   ----- version 0.03 -----
+Digest2 Documentation   ----- version 0.05 -----
 
 Contents
 
@@ -40,12 +40,13 @@ here are the discovery observations of the NEO 2005 OJ3.  (See MPEC
 You put them in a file, say fmo.obs, then type "digest2 fmo.obs" and 
 get the following output:
 
------------    NEO (q < 1.3)
-Designation     Raw   No-ID   Other Possibilities
-     C5O0011   95.80   98.55  (MC 1)
+-------  ----  NEO(q < 1.3)  -------------------
+Desig.    RMS    Raw  No-ID  Other Possibilities
+C5O0011  0.01  96.07  98.66  (MC 1)
 
-The raw NEO score of 95.80 means that this is almost certainly a NEO.  The
-no-ID score of 98.55 means it is even more certain to be a NEO discovery
+
+The raw NEO score of 96.07 means that this is almost certainly a NEO.  The
+no-ID score of 98.66 means it is even more certain to be a NEO discovery
 in the case where you have already tried to identify the object among known
 objects and found no obvious matches.  In the "Other Possibilities" column,
 MC 1 means there is still a 1% chance of this turning out to be a Mars
@@ -75,21 +76,26 @@ d2model.c
 d2math.c
 d2mpc.c
 muk.c
+gcr.c
+gcfmath.c
 digest2.h
 d2model.h
+gcf.h
 
 Type make, and executables should be built and other files created.  This
 includes downloading a copy of astorb.dat from lowell.edu.  Astorb.dat is
-fairly large and bandwidth on that site is often limited, so be patient.
+fairly large and bandwidth on that site is often limited.  It may take a
+few minutes.
 
 
 4.  Usage
 
-The executable is digest2.
+The main executable is digest2.
 
-digest2 <obsfile>       score observations
-digest2 -c              list available orbit classes
-digest2 -h or --help    display help file
+digest2 <obsfile>         score observations
+digest2 -c                list available orbit classes
+digest2 -h or --help      display help file
+digest2 -v or --version   display version information
 
 Obsfile must contain observations in the MPC 80 column observation format
 and nothing else.  The observations should be sorted and there should
@@ -110,9 +116,9 @@ Hun
 
 program output is
 
------------    NEO (q < 1.3)    Mars Crosser    Hungaria gr.
-Designation      Raw   No-ID     Raw   No-ID     Raw   No-ID
-     C5O0011   95.61   98.50    4.39    1.50    0.00    0.00
+-------  ----  NEO(q < 1.3)  Mars Crosser  Hungaria gr.
+Desig.    RMS    Raw  No-ID    Raw  No-ID    Raw  No-ID
+C5O0011  0.01  96.13  98.68   3.87   1.32   0.00   0.00
 
 The program runs considerably faster in this case, as it does not compute
 scores for other classes.
@@ -121,6 +127,27 @@ Notice the column format allows decimal places to be output for all configured
 classes.  Notice also that the NEO scores are not exactly the same as in
 the sample output in the previous section.  There is a bit of randomness
 built in to the algorithm, and scores vary somewhat on repeated runs.
+
+The second column, RMS, is an RMS of residuals along a great circle.
+A large value here is a warning that the class scores may be inaccurate.
+Several things can cause a large RMS, noisy or bad observations, parallax
+from various sources, or non-linear object motion.  To help diagnose
+RMS problems, a supplementary program, gcr, is included that prints
+great circle residuals by observation.  usage of this program is simply
+
+gcr <filename>
+
+program output is
+
+ designation     2d rms
+  mjd            ra    dec
+--------------------------
+     C5O0011       0.01
+53581.885750  -0.01  -0.00
+53581.895730   0.02   0.00
+53581.905660  -0.01  -0.00
+
+In this case, as the low RMS indicated, residuals are excellent.
 
 
 5.  Theory and implementation details

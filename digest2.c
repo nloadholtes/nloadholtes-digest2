@@ -81,9 +81,10 @@ char msgStatus[] = "Internal error:  Unexpected tracklet status.\n";
 char msgThread[] = "Thread creation failed.\n";
 char msgSwitch[] = "Unknown switch.\n";
 char msgUsage[]  = "\
-Usage: digest2 <obsfile>       score observations\n\
-       digest2 -c              list available orbit classes\n\
-       digest2 -h or --help    display help file\n";
+Usage: digest2 <obsfile>        score observations\n\
+       digest2 -c               list available orbit classes\n\
+       digest2 -h or --help     display help file\n\
+       digest2 -v or --version  display version information\n";
 char msgHelp[] = "\
 Digest2 help\n\
 \n\
@@ -431,6 +432,13 @@ int main (int argc, char **argv) {
 
    if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "--help")) {
       puts(msgHelp);
+      return 0;
+   }
+
+   if (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version")) {
+      puts("Digest2 version 0.05");
+      puts("Released Mar  1 2010");
+      printf("Compiled %s\n", __DATE__);
       return 0;
    }
 

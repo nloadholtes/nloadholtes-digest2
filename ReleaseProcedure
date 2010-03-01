@@ -1,0 +1,12 @@
+Preparation:  Make source changes, test, commit.  Review README for needed
+changes.  Push changes to Google code.
+
+1. Check last version number on Google code.
+2. Update version number in digest2.c and README.
+3. make.
+4. Test -v option of digest2.
+5. tar -cf digest2.<version number>.tar <exactly the files listed in README>.
+6. bzip2 digest2.<version number>.tar
+7. Test the bz2 in a clean directory.
+8. Commit digest2.c and README.  Tag with version number.  Push.
+9. Upload release archive.
