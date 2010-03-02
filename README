@@ -1,5 +1,5 @@
 
-Digest2 Documentation   ----- version 0.05 -----
+Digest2 Documentation   ----- version 0.06 -----
 
 Contents
 
@@ -7,7 +7,8 @@ Contents
 2.  Downloading:  source, other files
 3.  Unpacking, building, installing
 4.  Usage:  command line, configuration file
-5.  Theory and implementation details
+5.  Supplementary program:  gcr
+6.  Theory and implementation details
 
 
 1.  Program Overview
@@ -133,11 +134,22 @@ A large value here is a warning that the class scores may be inaccurate.
 Several things can cause a large RMS, noisy or bad observations, parallax
 from various sources, or non-linear object motion.  To help diagnose
 RMS problems, a supplementary program, gcr, is included that prints
-great circle residuals by observation.  usage of this program is simply
+great circle residuals by observation.
 
-gcr <filename>
+5.  Supplementary program:  gcr
 
-program output is
+Usage:
+
+   gcr [options] <input filename>
+
+Options:
+   -c <rms cutoff>  -- set cutoff, in arc seconds.
+   -p <pass file>   -- create file with tracklets with rms < cutoff.
+   -f <fail file>   -- create file with tracklets with rms >= cutoff.
+   -q               -- quiet.  supress normal output.
+   -h               -- print program help.
+
+Program output is
 
  designation     2d rms
   mjd            ra    dec
@@ -149,8 +161,13 @@ program output is
 
 In this case, as the low RMS indicated, residuals are excellent.
 
+If any of the options -c -p -f or -q are used, a pass file and a fail file
+are created.  Tracklets with RMS below the cutoff are copied to the pass
+file.  Tracklets with RMS greater than or equal to the cutoff are copied
+to the fail file.
 
-5.  Theory and implementation details
+
+6.  Theory and implementation details
 
 The theory behind the program is explained in detail in a paper
 currently in preparation.  (It's been in preparation a long time now.)
