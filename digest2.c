@@ -436,8 +436,8 @@ int main (int argc, char **argv) {
    }
 
    if (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version")) {
-      puts("Digest2 version 0.05");
-      puts("Released Mar  1 2010");
+      puts("Digest2 version 0.06");
+      puts("Released Mar  2 2010");
       printf("Compiled %s\n", __DATE__);
       return 0;
    }
