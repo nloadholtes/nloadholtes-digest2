@@ -17,7 +17,7 @@ digest2: $(d2src) digest2.h d2model.h
 
 # data file needed by digest2
 digest2.muk: muk s3m.dat astorb.dat
-	muk
+	./muk
 
 # muk executable
 muksrc = muk.c d2model.c
